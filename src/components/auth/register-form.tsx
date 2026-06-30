@@ -30,37 +30,45 @@ export function RegisterForm() {
         </div>
       )}
 
-      <div className="space-y-4">
-        <Input
-          name="name"
-          placeholder="Name"
-          label="Name"
-          required
-          disabled={isPending}
-        />
+      {state?.success && (
+        <div className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700 border border-green-200">
+          {state.message}
+        </div>
+      )}
 
-        <Input
-          name="email"
-          type="email"
-          placeholder="Email"
-          label="Email"
-          required
-          disabled={isPending}
-        />
+      {!state?.success && (
+        <div className="space-y-4">
+          <Input
+            name="name"
+            placeholder="Name"
+            label="Name"
+            required
+            disabled={isPending}
+          />
 
-        <Input
-          name="password"
-          type="password"
-          placeholder="Password"
-          label="Password"
-          required
-          disabled={isPending}
-        />
+          <Input
+            name="email"
+            type="email"
+            placeholder="Email"
+            label="Email"
+            required
+            disabled={isPending}
+          />
 
-        <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending ? "Creating account..." : "Register"}
-        </Button>
-      </div>
+          <Input
+            name="password"
+            type="password"
+            placeholder="Password"
+            label="Password"
+            required
+            disabled={isPending}
+          />
+
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? "Creating account..." : "Register"}
+          </Button>
+        </div>
+      )}
 
       <p className="mt-6 text-center text-sm text-gray-600">
         Already have an account?{" "}

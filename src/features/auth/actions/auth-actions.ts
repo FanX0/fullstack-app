@@ -14,7 +14,7 @@ export async function registerAction(prevState: any, formData: FormData) {
     return { error: "Please fill all fields." }
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -26,6 +26,10 @@ export async function registerAction(prevState: any, formData: FormData) {
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (data?.user && !data.session) {
+    return { success: true, message: "Registration successful! Please check your email to confirm your account before logging in." }
   }
 
   redirect("/dashboard")
