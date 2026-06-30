@@ -1,12 +1,17 @@
+"use client"
+
 import Link from "next/link"
+import { useActionState } from "react"
 import { loginAction } from "@/features/auth/actions/auth-actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export function LoginForm() {
+  const [state, formAction, isPending] = useActionState(loginAction, null)
+
   return (
     <form
-      action={loginAction}
+      action={formAction}
       className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
     >
       <div className="mb-6">
@@ -19,6 +24,12 @@ export function LoginForm() {
         </p>
       </div>
 
+      {state?.error && (
+        <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200">
+          {state.error}
+        </div>
+      )}
+
       <div className="space-y-4">
         <Input
           name="email"
@@ -26,6 +37,7 @@ export function LoginForm() {
           placeholder="Email"
           label="Email"
           required
+          disabled={isPending}
         />
 
         <Input
@@ -34,10 +46,11 @@ export function LoginForm() {
           placeholder="Password"
           label="Password"
           required
+          disabled={isPending}
         />
 
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? "Logging in..." : "Login"}
         </Button>
       </div>
 

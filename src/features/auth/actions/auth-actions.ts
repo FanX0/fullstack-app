@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 
-export async function registerAction(formData: FormData) {
+export async function registerAction(prevState: any, formData: FormData) {
   const supabase = await createClient()
 
   const name = String(formData.get("name") || "")
@@ -11,7 +11,7 @@ export async function registerAction(formData: FormData) {
   const password = String(formData.get("password") || "")
 
   if (!name.trim() || !email.trim() || !password.trim()) {
-    throw new Error("Please fill all fields.")
+    return { error: "Please fill all fields." }
   }
 
   const { error } = await supabase.auth.signUp({
@@ -25,20 +25,20 @@ export async function registerAction(formData: FormData) {
   })
 
   if (error) {
-    throw new Error(error.message)
+    return { error: error.message }
   }
 
   redirect("/dashboard")
 }
 
-export async function loginAction(formData: FormData) {
+export async function loginAction(prevState: any, formData: FormData) {
   const supabase = await createClient()
 
   const email = String(formData.get("email") || "")
   const password = String(formData.get("password") || "")
 
   if (!email.trim() || !password.trim()) {
-    throw new Error("Please fill all fields.")
+    return { error: "Please fill all fields." }
   }
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -47,7 +47,7 @@ export async function loginAction(formData: FormData) {
   })
 
   if (error) {
-    throw new Error(error.message)
+    return { error: error.message }
   }
 
   redirect("/dashboard")
