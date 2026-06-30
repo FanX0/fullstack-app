@@ -1,9 +1,11 @@
 import { NoteForm } from "@/features/notes/components/note-form"
 import { NoteList } from "@/features/notes/components/note-list"
 import { getNotes } from "@/features/notes/queries/note-query"
+import { getCategories } from "@/features/categories/queries/category-query"
 
 export default async function NotesPage() {
   const notes = await getNotes()
+  const categories = await getCategories()
 
   return (
     <div className="space-y-6">
@@ -18,7 +20,7 @@ export default async function NotesPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
-        <NoteForm />
+        <NoteForm categories={categories} />
         <NoteList notes={notes} />
       </div>
     </div>

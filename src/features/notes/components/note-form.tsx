@@ -1,9 +1,15 @@
+import Link from "next/link"
 import { createNoteAction } from "../actions/note-actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import type { Category } from "@/features/categories/types"
 
-export function NoteForm() {
+type NoteFormProps = {
+  categories: Category[]
+}
+
+export function NoteForm({ categories }: NoteFormProps) {
   return (
     <form
       action={createNoteAction}
@@ -27,12 +33,34 @@ export function NoteForm() {
           required
         />
 
-        <Input
-          name="category"
-          placeholder="Category"
-          label="Category"
-          required
-        />
+        <div className="w-full">
+          <label className="mb-1.5 block text-sm font-medium text-gray-700">
+            Category
+          </label>
+          <select
+            name="category"
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none transition focus:border-gray-950 focus:ring-1 focus:ring-gray-950 cursor-pointer"
+            required
+            defaultValue=""
+          >
+            <option value="" disabled>Select a category</option>
+            <option value="General">General</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          {categories.length === 0 && (
+            <p className="mt-1.5 text-xs text-gray-500">
+              No custom categories. Add some in the{" "}
+              <Link href="/dashboard/categories" className="text-gray-950 underline font-medium">
+                Categories
+              </Link>{" "}
+              tab.
+            </p>
+          )}
+        </div>
 
         <Textarea
           name="content"
